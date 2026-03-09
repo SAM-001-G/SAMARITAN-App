@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="SAMARITAN — Community-Powered Civic Platform. Report issues, trigger SOS, track civic accountability.">
+
+  <title>The Samaritan — Civic Platform</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS (for Map page) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ═══════════════════════════════════
+       HEADER
+  ════════════════════════════════════ -->
+  <header id="header">
+    <div class="logo-mark">
+      <img src="assets/logo.png" alt="The Samaritan Logo" class="logo-img" id="logo-img">
+      <div class="logo-text-wrap">
+        <span class="logo-name">THE SAMARITAN</span>
+        <span class="logo-tag">Community-Powered Civic Platform</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="hbtn notif-dot" id="notif-btn" title="Notifications">
+        <!-- Bell icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button class="hbtn" id="profile-btn" title="Profile">
+        <!-- User icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════
+       PAGES CONTAINER
+  ════════════════════════════════════ -->
+  <div id="pages">
+
+    <!-- ─────────────────────────────────
+         PAGE: FEED
+    ────────────────────────────────── -->
+    <section class="page active" id="page-feed">
+
+      <div class="alert-strip" id="alert-strip">
+        <div class="alert-dot"></div>
+        <span>2 active emergencies reported within 5km of you</span>
+      </div>
+
+      <div class="section-head">
+        <span class="section-title">Live Feed</span>
+        <span class="section-count" id="feed-count">0 reports</span>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="stats-row">
+        <div class="stat-mini"><div class="stat-mini-val" id="stat-total">0</div><div class="stat-mini-label">Total</div></div>
+        <div class="stat-mini"><div class="stat-mini-val" id="stat-today">0</div><div class="stat-mini-label">Today</div></div>
+        <div class="stat-mini"><div class="stat-mini-val" id="stat-verified">0</div><div class="stat-mini-label">Verified</div></div>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="trending-bar" id="filter-bar">
+        <div class="trend-chip active" data-filter="all">🌐 All</div>
+        <div class="trend-chip" data-filter="corruption">💰 Corruption</div>
+        <div class="trend-chip" data-filter="abandoned">🏗️ Abandoned</div>
+        <div class="trend-chip" data-filter="environment">🌿 Environment</div>
+        <div class="trend-chip" data-filter="safety">⚠️ Safety</div>
+        <div class="trend-chip" data-filter="public">🏛️ Public Service</div>
+      </div>
+
+      <!-- Feed cards injected by app.js -->
+      <div class="feed-scroll" id="feed-container"></div>
+
+      <button class="load-more-btn" id="load-more-btn">Load More Reports</button>
+    </section>
+
+    <!-- ─────────────────────────────────
+         PAGE: REPORT
+    ────────────────────────────────── -->
+    <section class="page" id="page-report">
+
+      <div class="section-head">
+        <span class="section-title">File a Report</span>
+      </div>
+
+      <div class="report-wrap">
+
+        <!-- Media upload zone -->
+        <label for="file-upload" class="upload-zone" id="upload-zone">
+          <div class="upload-icon" id="upload-icon">📎</div>
+          <div class="upload-label" id="upload-label">Tap to attach photo or video</div>
+          <div class="upload-sub">JPG · PNG · MP4 — Max 50MB</div>
+          <input type="file" id="file-upload" accept="image/*,video/*">
+        </label>
+
+        <!-- Category selector -->
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <div class="cat-grid" id="cat-grid">
+            <button class="cat-chip" data-cat="corruption"><span class="cat-icon">💰</span><span>Corruption</span></button>
+            <button class="cat-chip" data-cat="abandoned"><span class="cat-icon">🏗️</span><span>Abandoned</span></button>
+            <button class="cat-chip" data-cat="environment"><span class="cat-icon">🌿</span><span>Environment</span></button>
+            <button class="cat-chip" data-cat="safety"><span class="cat-icon">⚠️</span><span>Safety</span></button>
+            <button class="cat-chip" data-cat="public"><span class="cat-icon">🏛️</span><span>Public Service</span></button>
+            <button class="cat-chip" data-cat="other"><span class="cat-icon">📋</span><span>Other</span></button>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="report-desc">Description</label>
+          <textarea class="form-textarea" id="report-desc" placeholder="Describe what you witnessed in detail…"></textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <div class="location-strip" id="location-strip">
+            <span>📍</span>
+            <span id="location-text">Tap to capture your GPS location</span>
+          </div>
+        </div>
+
+        <!-- Optional name -->
+        <div class="form-group">
+          <label class="form-label" for="reporter-name">Your Name (Optional)</label>
+          <input type="text" class="form-input" id="reporter-name" placeholder="Anonymous Reporter" autocomplete="off">
+        </div>
+
+        <button class="btn-primary" id="submit-report-btn">SUBMIT REPORT</button>
+
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────
+         PAGE: SOS
+    ────────────────────────────────── -->
+    <section class="page" id="page-sos">
+
+      <div class="section-head">
+        <span class="section-title">Emergency SOS</span>
+      </div>
+
+      <div class="sos-wrap">
+
+        <!-- Hero SOS button -->
+        <div class="sos-hero">
+          <button class="sos-hero-btn" id="sos-hero-btn">
+            SOS
+            <span class="sos-sub">HOLD TO ACTIVATE</span>
+          </button>
+        </div>
+
+        <!-- Quick type buttons -->
+        <div class="sos-type-grid">
+          <div class="sos-type-card" data-type="Medical Emergency"><span class="sos-type-icon">🚑</span><span class="sos-type-label">Medical</span></div>
+          <div class="sos-type-card" data-type="Fire Emergency"><span class="sos-type-icon">🔥</span><span class="sos-type-label">Fire</span></div>
+          <div class="sos-type-card" data-type="Security Threat"><span class="sos-type-icon">🚨</span><span class="sos-type-label">Security</span></div>
+          <div class="sos-type-card" data-type="Accident / Disaster"><span class="sos-type-icon">⛑️</span><span class="sos-type-label">Disaster</span></div>
+        </div>
+
+        <!-- Status info panel -->
+        <div class="sos-info">
+          <div class="sos-info-row">
+            <span class="sos-info-icon">📡</span>
+            <div class="sos-info-text">
+              <div class="sos-info-label">Status</div>
+              <div class="sos-info-val" id="sos-status">Monitoring Active — GPS Ready</div>
+            </div>
+          </div>
+          <div class="sos-info-row">
+            <span class="sos-info-icon">📍</span>
+            <div class="sos-info-text">
+              <div class="sos-info-label">Your Location</div>
+              <div class="sos-info-val" id="sos-loc-display">Tap SOS to capture location</div>
+            </div>
+          </div>
+          <div class="sos-info-row">
+            <span class="sos-info-icon">📱</span>
+            <div class="sos-info-text">
+              <div class="sos-info-label">Emergency Numbers</div>
+              <div class="sos-info-val">Police: 10111 · Ambulance: 10177 · Fire: 10177</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────
+         PAGE: MAP
+    ────────────────────────────────── -->
+    <section class="page" id="page-map">
+
+      <div class="section-head">
+        <span class="section-title">Civic Map</span>
+      </div>
+
+      <div class="map-wrap">
+
+        <div id="map-container">
+          <div id="leaflet-map"></div>
+        </div>
+
+        <div class="map-legend">
+          <div class="legend-title">Category Legend</div>
+          <div class="legend-grid">
+            <div class="legend-item"><div class="legend-dot" style="background:#ff6666"></div> Corruption</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ffcc44"></div> Abandoned</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#44dd88"></div> Environment</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ff9944"></div> Safety</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#66aaff"></div> Public Service</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ff4444"></div> Emergency</div>
+          </div>
+        </div>
+
+        <div class="map-stats-grid">
+          <div class="map-stat"><div class="map-stat-val">24</div><div class="map-stat-label">Active Zones</div></div>
+          <div class="map-stat"><div class="map-stat-val">7</div><div class="map-stat-label">Resolved</div></div>
+          <div class="map-stat"><div class="map-stat-val">2</div><div class="map-stat-label">Critical</div></div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /pages -->
+
+  <!-- ═══════════════════════════════════
+       BOTTOM NAVIGATION
+  ════════════════════════════════════ -->
+  <nav id="bottom-nav">
+    <button class="nav-item active" data-page="feed">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-label">Feed</span>
+    </button>
+    <button class="nav-item" data-page="report">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="nav-label">Report</span>
+    </button>
+    <button class="nav-item" data-page="sos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="nav-label">SOS</span>
+    </button>
+    <button class="nav-item" data-page="map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      <span class="nav-label">Map</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- ═══════════════════════════════════
+     FLOATING SOS BUTTON
+════════════════════════════════════ -->
+<button id="sos-fab" aria-label="Emergency SOS">SOS</button>
+
+<!-- ═══════════════════════════════════
+     SOS CONFIRMATION MODAL
+════════════════════════════════════ -->
+<div id="sos-modal" role="dialog" aria-modal="true" aria-labelledby="sos-modal-title">
+  <div class="sos-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="sos-modal-title">🚨 EMERGENCY SOS</div>
+    <div class="sheet-sub" id="sos-type-display">This will broadcast your location to the community and alert emergency contacts.</div>
+    <div class="sos-location-box">
+      <span>📍</span>
+      <span id="modal-loc-text">Acquiring GPS coordinates…</span>
+    </div>
+    <button class="btn-sos-confirm" id="sos-confirm-btn">SEND EMERGENCY ALERT</button>
+    <button class="btn-cancel" id="sos-cancel-btn">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SUBMIT SUCCESS OVERLAY
+════════════════════════════════════ -->
+<div id="submit-success" aria-live="assertive">
+  <div class="success-icon">✅</div>
+  <div class="success-title">REPORT FILED</div>
+  <div class="success-sub">Your report has been submitted and will appear on the community feed shortly.</div>
+</div>
+
+<!-- ═══════════════════════════════════
+     TOAST NOTIFICATION
+════════════════════════════════════ -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- Leaflet JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<!-- App Logic -->
+<script src="js/app.js"></script>
+
+</body>
+    </html>
+                                                                                                                                     
