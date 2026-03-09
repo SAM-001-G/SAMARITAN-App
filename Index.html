@@ -133,10 +133,15 @@
 
         <!-- Location -->
         <div class="form-group">
-          <label class="form-label">Location</label>
+          <label class="form-label">Location — tap the map to pin exactly</label>
           <div class="location-strip" id="location-strip">
             <span>📍</span>
-            <span id="location-text">Tap to capture your GPS location</span>
+            <span id="location-text">Detecting your location…</span>
+          </div>
+          <!-- Mini interactive map for report pinning -->
+          <div id="report-map-container">
+            <div id="report-map"></div>
+            <div class="report-map-hint">Tap anywhere on the map to move the pin</div>
           </div>
         </div>
 
@@ -198,7 +203,7 @@
             <span class="sos-info-icon">📱</span>
             <div class="sos-info-text">
               <div class="sos-info-label">Emergency Numbers</div>
-              <div class="sos-info-val">Police: 10111 · Ambulance: 10177 · Fire: 10177</div>
+              <div class="sos-info-val">Police: 999 · Ambulance: 999 · Fire: 999 · DCI: 0800 722 203</div>
             </div>
           </div>
         </div>
@@ -234,9 +239,14 @@
         </div>
 
         <div class="map-stats-grid">
-          <div class="map-stat"><div class="map-stat-val">24</div><div class="map-stat-label">Active Zones</div></div>
+          <div class="map-stat"><div class="map-stat-val" id="map-stat-active">0</div><div class="map-stat-label">Active Reports</div></div>
           <div class="map-stat"><div class="map-stat-val">7</div><div class="map-stat-label">Resolved</div></div>
           <div class="map-stat"><div class="map-stat-val">2</div><div class="map-stat-label">Critical</div></div>
+        </div>
+
+        <div class="map-user-strip">
+          <span>📍 Your location:</span>
+          <span id="map-user-loc">Detecting…</span>
         </div>
 
       </div>
@@ -311,5 +321,4 @@
 <script src="js/app.js"></script>
 
 </body>
-    </html>
-                                                                                                                                     
+</html>
