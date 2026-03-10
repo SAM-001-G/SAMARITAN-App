@@ -704,6 +704,55 @@ document.getElementById('sos-modal').addEventListener('click', function(e) {
 document.getElementById('notif-btn').addEventListener('click', function() {
   showToast('3 new reports near you', 'warning');
 });
+// Emergency contacts array
+const emergencyContacts = [
+  { name: "Police", number: "999" },
+  { name: "Ambulance", number: "999" },
+  { name: "Fire Dept", number: "999" },
+  { name: "DCI", number: "0800722203" }
+];
+
+// Get the hero SOS button
+const sosHeroBtn = document.getElementById("sos-hero-btn");
+
+// Reference to SOS info panel where we can append buttons
+const sosInfoPanel = document.querySelector(".sos-info");
+
+// Create a container for dynamic call buttons
+let sosContactsContainer = document.createElement("div");
+sosContactsContainer.id = "sosContactsContainer";
+sosContactsContainer.style.marginTop = "10px";
+sosInfoPanel.appendChild(sosContactsContainer);
+
+sosHeroBtn.addEventListener("click", () => {
+  // Clear previous buttons if any
+  sosContactsContainer.innerHTML = "";
+
+  // Notify user
+  alert("SOS Activated! Tap a contact to call.");
+
+  // Create buttons for each emergency contact
+  emergencyContacts.forEach(contact => {
+    const btn = document.createElement("button");
+    btn.innerText = `Call ${contact.name}`;
+    btn.style.display = "block";
+    btn.style.width = "100%";
+    btn.style.margin = "5px 0";
+    btn.style.padding = "10px";
+    btn.style.backgroundColor = "#ff7a00";
+    btn.style.color = "black";
+    btn.style.border = "none";
+    btn.style.borderRadius = "5px";
+    btn.style.cursor = "pointer";
+
+    // Mobile-friendly dialer trigger
+    btn.onclick = () => {
+      window.location.href = `tel:${contact.number}`;
+    };
+
+    sosContactsContainer.appendChild(btn);
+  });
+});
 document.getElementById('profile-btn').addEventListener('click', function() {
   showToast('Profile — coming in next release', 'warning');
 });
