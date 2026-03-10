@@ -764,3 +764,63 @@ document.addEventListener('DOMContentLoaded', function() {
   loadFeed('all');
   detectUserLocation();  // ← immediately requests GPS on load
 });
+
+/* ──────────────────────────────
+   SOS — Dynamic Hold-to-Call
+──────────────────────────────── */
+const sosHeroBtn = document.getElementById("sos-hero-btn");
+let holdTimer;
+
+// Emergency numbers by type
+const emergencyNumbers = {
+  "Medical Emergency": "999",   // Ambulance
+  "Fire Emergency": "999",      // Fire
+  "Security Threat": "999",     // Police
+  "Accident / Disaster": "999", // DCI / Rescue
+};
+
+// Get all quick-type cards
+const sosTypeCards = document.querySelectorAll(".sos-type-card");
+
+sosHeroBtn.addEventListener("mousedown", startHold);
+sosHeroBtn.addEventListener("touchstart", startHold); 
+sosHeroBtn.addEventListener("mouseup", cancelHold);
+sosHeroBtn.addEventListener("mouseleave", cancelHold);
+sosHeroBtn.addEventListener("touchend", cancelHold);
+sosHeroBtn.addEventListener("touchcancel", cancelHold);
+
+function startHold() {
+  sosHeroBtn.textContent = "⚠️ Hold to call — 2 sec";
+  holdTimer = setTimeout(() => {
+    triggerDynamicCall();
+  }, 2000); // 2-second hold
+}
+
+function cancelHold() {
+  clearTimeout(holdTimer);
+  sosHeroBtn.innerHTML = `SOS <span class="sos-sub">HOLD TO ACTIVATE</span>`;
+}
+
+function triggerDynamicCall() {
+  // Determine selected type
+  let selectedType = null;
+  sosTypeCards.forEach(card => {
+    if (card.classList.contains("active") || card.classList.contains("selected")) {
+      selectedType = card.dataset.type;
+    }
+  });
+
+  // Default to Police if none selected
+  const numberToCall = selectedType ? emergencyNumbers[selectedType] : "999";
+  const serviceName  = selectedType || "Police";
+
+  // Update SOS panel
+  const sosStatus = document.getElementById("sos-status");
+  if (sosStatus) sosStatus.textContent = `📞 Calling ${serviceName}…`;
+
+  // Trigger phone dialer
+  window.location.href = `tel:${numberToCall}`;
+
+  // Reset button text
+  sosHeroBtn.innerHTML = `SOS <span class="sos-sub">HOLD TO ACTIVATE</span>`;
+}
